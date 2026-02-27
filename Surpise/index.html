@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">    
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Special Surprise</title>
+
+<style>
+
+body{
+margin:0;
+height:100vh;
+font-family:Arial;
+background:black;
+color:white;
+overflow:hidden;
+}
+
+/* INTRO */
+#intro{
+position:fixed;
+width:100%;
+height:100%;
+display:flex;
+justify-content:center;
+align-items:center;
+font-size:28px;
+background:black;
+animation:introFade 4s forwards;
+z-index:5;
+}
+
+@keyframes introFade{
+0%,70%{opacity:1;}
+100%{opacity:0;visibility:hidden;}
+}
+
+/* QUESTION */
+.container{
+display:none;
+position:absolute;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+padding:40px;
+border-radius:20px;
+background:linear-gradient(-45deg,#ff758c,#ff7eb3,#ffb199,#ff0844);
+background-size:400% 400%;
+animation:bgMove 10s infinite;
+text-align:center;
+}
+
+@keyframes bgMove{
+0%{background-position:0% 50%;}
+50%{background-position:100% 50%;}
+100%{background-position:0% 50%;}
+}
+
+button{
+padding:14px 28px;
+font-size:18px;
+border:none;
+border-radius:25px;
+margin:10px;
+cursor:pointer;
+}
+
+#yes{background:white;color:#ff4b7d;}
+#yes:hover{transform:scale(1.2);}
+#no{background:black;color:white;position:absolute;}
+
+/* SUCCESS SCREEN */
+#success{
+display:none;
+position:fixed;
+width:100%;
+height:100%;
+overflow:hidden;
+}
+
+/* BLUR BACKGROUND */
+#bgBlur{
+position:absolute;
+width:100%;
+height:100%;
+background:url("photo.jpg") center/cover no-repeat;
+filter:blur(25px) brightness(60%);
+transform:scale(1.2);
+}
+
+/* CLEAR PHOTO */
+#mainPhoto{
+position:absolute;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+max-height:90%;
+max-width:90%;
+border-radius:15px;
+box-shadow:0 0 40px black;
+}
+
+/* TEXT */
+#successText{
+position:absolute;
+bottom:60px;
+left:50%;
+transform:translateX(-50%);
+background:rgba(0,0,0,0.6);
+padding:20px;
+border-radius:15px;
+max-width:85%;
+font-size:24px;
+text-align:center;
+}
+
+/* HEARTS */
+.heart{
+position:absolute;
+animation:float 6s linear infinite;
+}
+
+@keyframes float{
+0%{transform:translateY(100vh);}
+100%{transform:translateY(-10vh);}
+}
+
+</style>
+</head>
+
+<body>
+
+<div id="intro">
+🎬 Loading Special Moment...
+</div>
+
+<div class="container" id="main">
+<h1 id="question"></h1>
+<button id="yes" onclick="accept()">YES ❤️</button>
+<button id="no" onmouseover="moveNo()">NO 😜</button>
+</div>
+
+<!-- FINAL SCREEN -->
+<div id="success">
+
+<div id="bgBlur"></div>
+
+<img src="photo.jpg" id="mainPhoto">
+
+<div id="successText">
+💖 Our Journey Starts Here 💖<br>
+Our journey will continue until the last breath ❤️
+</div>
+
+</div>
+
+<audio id="bgMusic" loop>
+<source src="mylove.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+
+setTimeout(()=>{
+document.getElementById("main").style.display="block";
+},4000);
+
+const params=new URLSearchParams(window.location.search);
+const from=params.get("from")||"Ravi";
+const to=params.get("to")||"";
+
+document.getElementById("question")
+.innerHTML=`Hey ${to} ❤️<br>Will you be ${from}'s special person?`;
+
+function moveNo(){
+let btn=document.getElementById("no");
+btn.style.left=Math.random()*(window.innerWidth-100)+"px";
+btn.style.top=Math.random()*(window.innerHeight-50)+"px";
+}
+
+function accept(){
+document.getElementById("main").style.display="none";
+document.getElementById("success").style.display="block";
+document.getElementById("bgMusic").play();
+startHearts();
+}
+
+function startHearts(){
+setInterval(()=>{
+let h=document.createElement("div");
+h.className="heart";
+h.innerHTML="💖";
+h.style.left=Math.random()*100+"vw";
+h.style.fontSize=(20+Math.random()*30)+"px";
+document.body.appendChild(h);
+setTimeout(()=>h.remove(),6000);
+},300);
+}
+
+</script>
+
+</body>
+</html>
